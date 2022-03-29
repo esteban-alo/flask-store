@@ -1,20 +1,10 @@
-from app.api.commons.commons import error_response
-from .interfaces import User, ErrorResponse
 from marshmallow import (
     Schema,
     fields,
-    pre_load,
-    pre_dump,
-    post_dump,
-    post_load,
-    validate,
+    post_load
 )
 
-from marshmallow.exceptions import MarshmallowError
-
-
-class AppError(MarshmallowError):
-    pass
+from .interfaces import User
 
 
 class ErrorSchema(Schema):
@@ -32,17 +22,16 @@ class ErrorSchema(Schema):
 class UsersSchema(Schema):
     """User Schema"""
 
+    id = fields.Int()
+    created_at = fields.Str()
+    email = fields.Email(required=True)
+    name = fields.String(required=True)
+    updated_at = fields.Str()
+    uuid = fields.UUID()
+
     class Meta:
         dump_only = ("created_at", "updated_at", "uuid",)
         exclude = ("id",)
-        ordered = True
-
-    id = fields.Int()
-    created_at = fields.DateTime()
-    email = fields.Email(required=True)
-    name = fields.String(required=True, validate=validate.Length(min=1))
-    updated_at = fields.DateTime()
-    uuid = fields.UUID()
 
     @post_load
     def make(self, data, **kwargs):
@@ -60,4 +49,4 @@ class PaginatedResultsSchema(Schema):
 
 class GetUsersResponseSchema(PaginatedResultsSchema):
     """Registered users list"""
-    results = fields.Nested(UsersSchema, many=True)
+    results = fields.List(fields.Nested(UsersSchema))
