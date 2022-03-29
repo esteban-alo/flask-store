@@ -1,5 +1,4 @@
 from injector import singleton
-from flask_injector import Binder, request
 
 from .services import UserService
 
