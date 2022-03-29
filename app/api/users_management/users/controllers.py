@@ -28,14 +28,14 @@ class GetUsers(Resource):
         return self.service.get_users()
 
     @api.expect(for_swagger(schema=UsersSchema, api=api, operation="load"))
-    @api.response(code=200, description="User data successfully sent", )
+    @api.marshal_with(fields=for_swagger(UsersSchema, api=api, operation="dump"), code=201, as_list=False)
     @api.response(code=400, description="Bad Request", model=for_swagger(schema=ErrorSchema, api=api, operation="dump"))
     def post(self):
         """ Create a new User """
         try:
             schema = UsersSchema()
             user = schema.load(request.json)
-            return self.service.create_user(user)
+            return self.service.create_user(user), 201
         except Exception as validation_error:
             return error_response("E01", validation_error.messages, "Fields Validation Error",
                                   "/users_management/users/", 400)
