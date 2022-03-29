@@ -24,12 +24,14 @@ class UserService:
 
     def create_user(self, user: User) -> None:
         """ Get users data by username """
+        user_schema = User.schema()
         user.id = self.id
         user.uuid = uuid()
         user.created_at = get_current_datetime()
         user.updated_at = get_current_datetime()
         self.id = self.id + 1
         self.users_list.append(user)
+        return user_schema.dump(user)
 
     def get_users(self):
         response = UsersResponse.schema()
