@@ -1,18 +1,15 @@
-import json
+from flask import request
+from flask_accepts import for_swagger
+from flask_restx import Namespace, Resource
+from injector import inject
 
 from app.api.commons.commons import error_response
-from .services import UserService
 from .schemas import (
     ErrorSchema,
     GetUsersResponseSchema,
     UsersSchema,
 )
-
-from flask import request, jsonify
-from flask_accepts import for_swagger
-from flask_restx import Namespace, Resource
-from injector import inject
-from marshmallow.exceptions import ValidationError
+from .services import UserService
 
 api = Namespace("users", description="User management operations")
 
@@ -25,20 +22,21 @@ class GetUsers(Resource):
         self.service = service
         self.api = kwargs["api"]
 
-    @api.response(code=200, description="List of users", model=for_swagger(schema=GetUsersResponseSchema, api=api))
+    @api.marshal_with(for_swagger(GetUsersResponseSchema, api=api, operation="dump"), 200)
     def get(self):
         """ Return all users """
         return self.service.get_users()
 
-    @api.expect(for_swagger(UsersSchema, api))
-    @api.response(code=400, description="Bad Request", model=for_swagger(ErrorSchema, api))
+    @api.expect(for_swagger(schema=UsersSchema, api=api, operation="load"))
+    @api.response(code=200, description="User data successfully sent", )
+    @api.response(code=400, description="Bad Request", model=for_swagger(schema=ErrorSchema, api=api, operation="dump"))
     def post(self):
         """ Create a new User """
         try:
             schema = UsersSchema()
             user = schema.load(request.json)
             return self.service.create_user(user)
-        except ValidationError as validation_error:
+        except Exception as validation_error:
             return error_response("E01", validation_error.messages, "Fields Validation Error",
                                   "/users_management/users/", 400)
 
@@ -51,8 +49,8 @@ class GetUserByName(Resource):
         self.service = service
         self.api = kwargs["api"]
 
-    @api.response(code=200, description="", model=for_swagger(UsersSchema, api))
-    @api.response(code=404, description="User Not Found", model=for_swagger(ErrorSchema, api))
+    @api.marshal_with(for_swagger(schema=UsersSchema, api=api, operation="dump"), 200)
+    @api.response(code=400, description="Bad Request", model=for_swagger(schema=ErrorSchema, api=api, operation="dump"))
     def get(self, name: str):
         """ Get a specific user data by their username """
         return self.service.get_user_data(name)
