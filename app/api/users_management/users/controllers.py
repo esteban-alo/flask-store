@@ -22,7 +22,7 @@ class GetUsers(Resource):
         self.service = service
         self.api = kwargs["api"]
 
-    @api.marshal_with(for_swagger(GetUsersResponseSchema, api=api, operation="dump"), 200)
+    @api.marshal_with(fields=for_swagger(GetUsersResponseSchema, api=api, operation="dump"), code=200, as_list=False)
     def get(self):
         """ Return all users """
         return self.service.get_users()
@@ -49,7 +49,7 @@ class GetUserByName(Resource):
         self.service = service
         self.api = kwargs["api"]
 
-    @api.marshal_with(for_swagger(schema=UsersSchema, api=api, operation="dump"), 200)
+    @api.marshal_with(fields=for_swagger(UsersSchema, api=api, operation="dump"), code=200, as_list=False)
     @api.response(code=400, description="Bad Request", model=for_swagger(schema=ErrorSchema, api=api, operation="dump"))
     def get(self, name: str):
         """ Get a specific user data by their username """
