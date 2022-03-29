@@ -1,43 +1,39 @@
-from app.api.commons.commons import uuid
 from dataclasses import dataclass, field
+from typing import Any, Dict, List
+
 from dataclasses_json import dataclass_json
-from datetime import datetime
-from typing import Any, List
 
 
 @dataclass_json
 @dataclass
 class User:
-    id: int = None
-    created_at: str = str(datetime.now())
-    email: str = None
-    name: str = None
-    updated_at: str = str(datetime.now())
-    uuid: str = uuid()
+    id: int = field(init=False, repr=False)
+    created_at: str = field(default_factory=str)
+    email: str = field(default_factory=str, init=True)
+    name: str = field(default_factory=str, init=True)
+    updated_at: str = field(default_factory=str)
+    uuid: str = field(default_factory=str)
 
 
-@dataclass
+
+@dataclass(order=True)
 class PaginatedResults:
     limit: int
     offset: int
     total: int
 
-
 @dataclass_json
-@dataclass
+@dataclass(order=True)
 class UsersResponse(PaginatedResults):
-    results: List[User]
-
-    def obj_dict(self):
-        return self.__dict__
+    results: List[User] = field(default_factory=list, repr=True)
 
 
 @dataclass_json
-@dataclass
+@dataclass(order=True)
 class ErrorResponse:
-    details: dict
+    details: Dict[Any, Any]
     error: str
     message: str
     path: str
     status: int
-    timestamp: datetime
+    timestamp: str = field(default_factory=str)
