@@ -12,7 +12,7 @@ class ErrorSchema(Schema):
     error = fields.Str()
     message = fields.Str()
     path = fields.Url()
-    timestamp = fields.DateTime()
+    timestamp = fields.Str()
     status = fields.Int()
 
     class Meta:
