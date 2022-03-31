@@ -1,6 +1,6 @@
 from injector import singleton
 
-from .services import UserService
+from app.api.users_management.users.services import UserService
 
 
 def configure(binder):

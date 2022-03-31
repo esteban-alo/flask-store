@@ -5,7 +5,7 @@ from injector import inject
 from marshmallow.exceptions import ValidationError
 
 from app.api.commons.commons import error_response
-from .schemas import (
+from app.api.users_management.users.schemas import (
     ErrorSchema,
     GetUsersResponseSchema,
     UsersSchema,

@@ -3,12 +3,11 @@ from typing import List
 from injector import inject
 
 from app.api.commons.commons import (
-    error_response,
     get_current_datetime,
     uuid,
 )
-from flask_restx import marshal
-from .interfaces import (
+
+from app.api.users_management.users.interfaces import (
     User,
     UsersResponse,
 )
