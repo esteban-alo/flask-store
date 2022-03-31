@@ -1,8 +1,4 @@
-from marshmallow import (
-    Schema,
-    fields,
-    post_load
-)
+from marshmallow import Schema, fields, post_load
 
 from .interfaces import User
 
@@ -30,7 +26,11 @@ class UsersSchema(Schema):
     uuid = fields.UUID()
 
     class Meta:
-        dump_only = ("created_at", "updated_at", "uuid",)
+        dump_only = (
+            "created_at",
+            "updated_at",
+            "uuid",
+        )
         exclude = ("id",)
 
     @post_load
@@ -49,4 +49,5 @@ class PaginatedResultsSchema(Schema):
 
 class GetUsersResponseSchema(PaginatedResultsSchema):
     """Registered users list"""
+
     results = fields.List(fields.Nested(UsersSchema))
