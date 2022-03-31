@@ -4,7 +4,7 @@ from marshmallow import (
     post_load
 )
 
-from app.api.users_management.users.interfaces import User
+from .interfaces import User
 
 
 class ErrorSchema(Schema):

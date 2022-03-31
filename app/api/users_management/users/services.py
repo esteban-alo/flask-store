@@ -6,7 +6,6 @@ from app.api.commons.commons import (
     get_current_datetime,
     uuid,
 )
-
 from app.api.users_management.users.interfaces import (
     User,
     UsersResponse,

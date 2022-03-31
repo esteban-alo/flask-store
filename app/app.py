@@ -12,6 +12,7 @@ from app.api.users_management.users.dependencies import (
 app = Flask(__name__)
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
+
 app.register_blueprint(users_management)
 
 FlaskInjector(
