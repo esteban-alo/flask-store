@@ -1,3 +1,3 @@
 from flask_restx import Namespace
 
-ns = Namespace('User', path='/')
+ns = Namespace("User", path="/")

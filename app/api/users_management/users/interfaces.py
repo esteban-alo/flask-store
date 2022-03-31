@@ -15,12 +15,12 @@ class User:
     uuid: str = field(default_factory=str)
 
 
-
 @dataclass(order=True)
 class PaginatedResults:
     limit: int
     offset: int
     total: int
+
 
 @dataclass_json
 @dataclass(order=True)
